@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.13)
 project(T_rocksdb)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -15,7 +15,8 @@ list(APPEND CMAKE_REQUIRED_INCLUDES /usr/local/include)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
-find_package(snappy REQUIRED)
+find_package(THREADS REQUIRED)
+find_package(SNAPPY REQUIRED)
 find_package(ZLIB REQUIRED)
 option(WITH_LZ4 "LZ4 compression support" ON)
 if(WITH_LZ4)
@@ -31,4 +32,4 @@ build_rocksdb()
 
 add_executable(T_rocksdb main.cpp)
 target_include_directories(T_rocksdb SYSTEM PUBLIC $<TARGET_PROPERTY:RocksDB::RocksDB,INTERFACE_INCLUDE_DIRECTORIES>)
-target_link_libraries(T_rocksdb RocksDB::RocksDB)
+target_link_libraries(T_rocksdb RocksDB::RocksDB ${CMAKE_THREAD_LIBS_INIT})
